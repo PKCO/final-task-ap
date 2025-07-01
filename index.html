@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Chatbot | JARVIS</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>AI Assistant</h2>
+                <div class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </div>
+            </div>
+            <div class="tab-buttons">
+                <button class="tab-button active" onclick="showFrame('jarvis')">
+                    <i class="fas fa-robot"></i>
+                    <span>JARVIS</span>
+                </button>
+                <button class="tab-button" onclick="showFrame('google')">
+                    <i class="fab fa-google"></i>
+                    <span>Gemini</span>
+                </button>
+            </div>
+            <div class="user-profile">
+                <div class="avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-info">
+                    <span class="username">User</span>
+                    <span class="user-status">Online</span>
+                </div>
+            </div>
+        </div>
+        <div class="main-content">
+            <iframe id="jarvis-frame" src="jarvis.html" class="active-frame"></iframe>
+            <iframe id="google-frame" src="gemini.html"></iframe>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

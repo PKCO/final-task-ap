@@ -1,0 +1,336 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>JARVIS – Virtual Assistant</title>
+    <link rel="shortcut icon" href="avatar.png" type="image/x-icon">
+    <!-- Linking the CSS file for styling -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Importing fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Roboto+Mono:wght@300;400;500;600&display=swap');
+
+        /* Color variables */
+        :root {
+            --primary: #00f2ff;
+            --primary-dark: #00bcd4;
+            --secondary: #1a1a2e;
+            --background: #0f0f1a;
+            --text-light: #e6f1ff;
+            --text-dim: #8b9dc3;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --neon-glow: 0 0 10px var(--primary), 0 0 20px var(--primary), 0 0 30px var(--primary);
+        }
+
+        /* Universal styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text-light);
+            font-family: 'Roboto Mono', monospace;
+            overflow-x: hidden;
+            height: 100vh;
+        }
+
+        /* Main section */
+        .main {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, #1a1a2e 0%, #0f0f1a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Futuristic background elements */
+        .main::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 242, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 80% 70%, rgba(0, 188, 212, 0.1) 0%, transparent 20%);
+            z-index: 0;
+        }
+
+        /* Image container */
+        .image-container {
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 30px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* Image styling */
+        .image img {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            box-shadow: var(--neon-glow);
+            transition: all 0.5s ease;
+        }
+
+        .image img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--primary), 0 0 30px var(--primary), 0 0 40px var(--primary);
+        }
+
+        /* Title styling */
+        h1 {
+            color: var(--primary);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 20px 0 10px;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px var(--primary);
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 3px;
+            background: var(--primary);
+            margin: 10px auto;
+            box-shadow: var(--neon-glow);
+        }
+
+        /* Subtitle styling */
+        p {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            max-width: 500px;
+            line-height: 1.6;
+        }
+
+        /* Input section */
+        .input {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            max-width: 500px;
+            height: 70px;
+            border-radius: 35px;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 0 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .input:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
+        }
+
+        /* Microphone button */
+        .talk {
+            background: transparent;
+            outline: none;
+            border: none;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: var(--primary);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            border-radius: 50%;
+        }
+
+        .talk:hover {
+            color: white;
+            background: var(--primary);
+            transform: scale(1.1);
+            box-shadow: 0 0 15px var(--primary);
+        }
+
+        /* Content text */
+        .content {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-right: 20px;
+            flex-grow: 1;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        /* Active state for listening */
+        .input.listening {
+            border-color: var(--primary);
+            box-shadow: var(--neon-glow);
+            animation: pulse 1.5s infinite;
+        }
+
+        .input.listening .talk {
+            color: #ff3d3d;
+            animation: pulse 0.8s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            p {
+                font-size: 1rem;
+                padding: 0 20px;
+            }
+            
+            .input {
+                height: 60px;
+                width: 95%;
+            }
+            
+            .image img {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="main">
+        <div class="image-container">
+            <div class="image">
+                <img decoding="async" src="image.png" alt="JARVIS Image">
+            </div>
+            <h1>J A R V I S</h1>
+            <p>I'm your Virtual Assistant. How may I help you today?</p>
+        </div>
+        <div class="input">
+            <h1 class="content">Click here to speak</h1>
+            <button class="talk"><i class="fas fa-microphone-alt"></i></button>
+        </div>
+    </section>
+
+    <script>
+        // All original JavaScript remains exactly the same
+        const btn = document.querySelector('.talk');
+        const content = document.querySelector('.content');
+        const inputDiv = document.querySelector('.input');
+
+        function speak(text) {
+            const text_speak = new SpeechSynthesisUtterance(text);
+            text_speak.rate = 1;
+            text_speak.volume = 1;
+            text_speak.pitch = 1;
+            window.speechSynthesis.speak(text_speak);
+        }
+
+        function wishMe() {
+            var day = new Date();
+            var hour = day.getHours();
+            if (hour >= 0 && hour < 12) {
+                speak("Good Morning Boss...");
+            } else if (hour >= 12 && hour < 17) {
+                speak("Good Afternoon Boss...");
+            } else {
+                speak("Good Evening Boss...");
+            }
+        }
+
+        window.addEventListener('load', () => {
+            speak("Initializing JARVIS...");
+            wishMe();
+        });
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+
+        recognition.onresult = (event) => {
+            const currentIndex = event.resultIndex;
+            const transcript = event.results[currentIndex][0].transcript;
+            content.textContent = transcript;
+            takeCommand(transcript.toLowerCase());
+        };
+
+        btn.addEventListener('click', () => {
+            content.textContent = "Listening...";
+            inputDiv.classList.add('listening');
+            recognition.start();
+        });
+
+        recognition.onend = () => {
+            inputDiv.classList.remove('listening');
+        };
+
+        function takeCommand(message) {
+            if (message.includes('hey') || message.includes('hello')) {
+                speak("Hello Christena, How may I help you?");
+            } else if (message.includes("open google")) {
+                window.open("https://google.com", "_blank");
+                speak("Opening Google...");
+            } else if (message.includes("open youtube")) {
+                window.open("https://youtube.com", "_blank");
+                speak("Opening Youtube...");
+            } else if (message.includes("open facebook")) {
+                window.open("https://facebook.com", "_blank");
+                speak("Opening Facebook...");
+            } else if (message.includes('what is') || message.includes('who is') || message.includes('what are')) {
+                window.open(`https://www.google.com/search?q=${message.replace(" ", "+")}`, "_blank");
+                const finalText = "This is what I found on the internet regarding " + message;
+                speak(finalText);
+            } else if (message.includes('wikipedia')) {
+                window.open(`https://en.wikipedia.org/wiki/${message.replace("wikipedia", "").trim()}`, "_blank");
+                const finalText = "This is what I found on Wikipedia regarding " + message;
+                speak(finalText);
+            } else if (message.includes('time')) {
+                const time = new Date().toLocaleString(undefined, { hour: "numeric", minute: "numeric" });
+                const finalText = "The current time is " + time;
+                speak(finalText);
+            } else if (message.includes('date')) {
+                const date = new Date().toLocaleString(undefined, { month: "short", day: "numeric" });
+                const finalText = "Today's date is " + date;
+                speak(finalText);
+            } else if (message.includes('calculator')) {
+                window.open('Calculator:///');
+                const finalText = "Opening Calculator";
+                speak(finalText);
+            } else {
+                window.open(`https://www.google.com/search?q=${message.replace(" ", "+")}`, "_blank");
+                const finalText = "I found some information for " + message + " on Google";
+                speak(finalText);
+            }
+        }
+    </script>
+</body>
+</html>
